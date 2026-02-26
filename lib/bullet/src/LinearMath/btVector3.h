@@ -41,7 +41,7 @@ ATTRIBUTE_ALIGNED16(class) btVector3
 public:
 
 #if defined (__SPU__) && defined (__CELLOS_LV2__)
-		btScalar	m_floats[4];
+		btScalar	m_floats[4] = {0.0f, 0.0f, 0.0f, 0.0f};
 public:
 	SIMD_FORCE_INLINE const vec_float4&	get128() const
 	{
@@ -63,7 +63,7 @@ public:
 		mVec128 = v128;
 	}
 #else
-	btScalar	m_floats[4];
+	btScalar	m_floats[4] = {0.0f, 0.0f, 0.0f, 0.0f};
 #endif
 #endif //__CELLOS_LV2__ __SPU__
 
