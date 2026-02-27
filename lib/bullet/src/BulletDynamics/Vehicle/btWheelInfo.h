@@ -78,6 +78,8 @@ struct btWheelInfo
 	
     bool m_was_on_ground;
 
+	void*		m_clientInfo;//can be used to store pointer to sync transforms...
+
 	btWheelInfo(btWheelInfoConstructionInfo& ci)
 
 	{

@@ -52,7 +52,7 @@ public:
 #ifdef BT_USE_SSE // _WIN32
 	union {
 		__m128 mVec128;
-		btScalar	m_floats[4];
+		btScalar	m_floats[4] = {0.0f, 0.0f, 0.0f, 0.0f};
 	};
 	SIMD_FORCE_INLINE	__m128	get128() const
 	{
