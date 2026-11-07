@@ -37,7 +37,6 @@
 #include "physics/btKart.hpp"
 #include "race/race_manager.hpp"
 #include "tracks/track.hpp"
-#include "utils/aligned_array.hpp"
 #include "utils/constants.hpp"
 #include "utils/vs.hpp"
 
