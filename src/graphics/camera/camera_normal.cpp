@@ -31,6 +31,8 @@
 #include "karts/kart.hpp"
 #include "karts/kart_properties.hpp"
 #include "karts/skidding.hpp"
+#include "modes/world.hpp"
+#include "network/network_config.hpp"
 #include "tracks/track.hpp"
 #include <string>
 #include <vector>
@@ -322,6 +324,13 @@ void CameraNormal::getCameraSettings(Mode mode,
  */
 void CameraNormal::update(float dt)
 {
+    if (World::getWorld()->getPhase() ==
+        WorldStatus::IN_GAME_MENU_PHASE &&
+        !NetworkConfig::get()->isNetworking() &&
+        !RaceManager::get()->isBenchmarking())
+    {
+        return;
+    }
     Camera::update(dt);
     if(!m_kart) return;
 

@@ -32,6 +32,8 @@
 #include "karts/explosion_animation.hpp"
 #include "karts/kart.hpp"
 #include "karts/skidding.hpp"
+#include "modes/world.hpp"
+#include "network/network_config.hpp"
 #include "physics/btKart.hpp"
 #include "race/race_manager.hpp"
 #include "tracks/track.hpp"
@@ -275,6 +277,14 @@ void Camera::setInitialTransform()
  */
 void Camera::update(float dt)
 {
+    if (World::getWorld()->getPhase() ==
+        WorldStatus::IN_GAME_MENU_PHASE &&
+        !NetworkConfig::get()->isNetworking() &&
+        !RaceManager::get()->isBenchmarking())
+    {
+        return;
+    }
+
     if (!m_kart)
     {
         if (RaceManager::get()->getNumLocalPlayers() < 2)
