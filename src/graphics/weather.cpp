@@ -20,6 +20,7 @@
 #include "audio/sfx_manager.hpp"
 #include "graphics/weather.hpp"
 #include "modes/world.hpp"
+#include "network/network_config.hpp"
 #include "tracks/track.hpp"
 #include "utils/random_generator.hpp"
 
@@ -62,6 +63,14 @@ Weather::~Weather()
 
 void Weather::update(float dt)
 {
+    if (World::getWorld()->getPhase() ==
+        WorldStatus::IN_GAME_MENU_PHASE &&
+        !NetworkConfig::get()->isNetworking() &&
+        !RaceManager::get()->isBenchmarking())
+    {
+        return;
+    }
+
     if (!Track::getCurrentTrack()->getWeatherLightning())
         return;
         
@@ -74,8 +83,7 @@ void Weather::update(float dt)
     {
         startLightning();
 
-        if (m_thunder_sound &&
-            World::getWorld()->getPhase() != WorldStatus::IN_GAME_MENU_PHASE)
+        if (m_thunder_sound)
         {
             m_thunder_sound->play();
         }
