@@ -56,7 +56,6 @@ CameraEnd::CameraEnd(int camera_index, AbstractKart* kart)
     else
         m_next_end_camera = 0;
     setFoV();
-
     update(0);
 }   // Camera
 
@@ -106,7 +105,6 @@ void CameraEnd::readEndCamera(const XMLNode &root)
 void CameraEnd::update(float dt)
 {
     Camera::update(dt);
-
     m_camera->setNearValue(1.0f);
 
     // First test if the kart is close enough to the next end camera, and
