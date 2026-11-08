@@ -22,8 +22,6 @@
 #include "karts/abstract_kart.hpp"
 #include "race/race_manager.hpp"
 #include "tracks/drive_graph.hpp"
-#include "modes/world.hpp"
-#include "network/network_config.hpp"
 
 #include "ICameraSceneNode.h"
 
@@ -59,13 +57,6 @@ CameraEnd::CameraEnd(int camera_index, AbstractKart* kart)
         m_next_end_camera = 0;
     setFoV();
 
-    if (World::getWorld()->getPhase() ==
-        WorldStatus::IN_GAME_MENU_PHASE &&
-        !NetworkConfig::get()->isNetworking() &&
-        !RaceManager::get()->isBenchmarking())
-    {
-        return;
-    }
     update(0);
 }   // Camera
 
@@ -114,13 +105,6 @@ void CameraEnd::readEndCamera(const XMLNode &root)
  */
 void CameraEnd::update(float dt)
 {
-    if (World::getWorld()->getPhase() ==
-        WorldStatus::IN_GAME_MENU_PHASE &&
-        !NetworkConfig::get()->isNetworking() &&
-        !RaceManager::get()->isBenchmarking())
-    {
-        return;
-    }
     Camera::update(dt);
 
     m_camera->setNearValue(1.0f);

@@ -3273,14 +3273,6 @@ SFXBase* Kart::getNextEmitter()
  */
 void Kart::updateGraphics(float dt)
 {
-    if (World::getWorld()->getPhase() ==
-        WorldStatus::IN_GAME_MENU_PHASE &&
-        !NetworkConfig::get()->isNetworking() &&
-        !RaceManager::get()->isBenchmarking())
-    {
-        return;
-    }
-
     /* (TODO: add back when properly done)
     for (int n = 0; n < SFXManager::NUM_CUSTOMS; n++)
     {

@@ -23,8 +23,6 @@
 #include "config/user_config.hpp"
 #include "karts/abstract_kart.hpp"
 #include "karts/skidding.hpp"
-#include "modes/world.hpp"
-#include "network/network_config.hpp"
 
 #include "vector3d.h"
 
@@ -122,13 +120,6 @@ void CameraFPS::applyMouseMovement (float x, float y)
  */
 void CameraFPS::update(float dt)
 {
-    if (World::getWorld()->getPhase() ==
-        WorldStatus::IN_GAME_MENU_PHASE &&
-        !NetworkConfig::get()->isNetworking() &&
-        !RaceManager::get()->isBenchmarking())
-    {
-        return;
-    }
     Camera::update(dt);
     
     // To view inside tunnels in top mode, increase near value

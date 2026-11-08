@@ -26,8 +26,6 @@
 #include "karts/kart.hpp"
 #include "karts/kart_model.hpp"
 #include "karts/skidding.hpp"
-#include "modes/world.hpp"
-#include "network/network_config.hpp"
 #include "physics/btKart.hpp"
 
 CameraDebug::CameraDebugType CameraDebug::m_default_debug_Type =
@@ -93,13 +91,6 @@ void CameraDebug::getCameraSettings(float *above_kart, float *cam_angle,
  */
 void CameraDebug::update(float dt)
 {
-    if (World::getWorld()->getPhase() ==
-        WorldStatus::IN_GAME_MENU_PHASE &&
-        !NetworkConfig::get()->isNetworking() &&
-        !RaceManager::get()->isBenchmarking())
-    {
-        return;
-    }
     Camera::update(dt);
 
     m_camera->setNearValue(1.0f);
