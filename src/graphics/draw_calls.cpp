@@ -29,6 +29,8 @@
 #include "graphics/text_billboard_drawer.hpp"
 #include "graphics/sp/sp_base.hpp"
 #include "graphics/sp/sp_mesh_node.hpp"
+#include "modes/world.hpp"
+#include "network/network_config.hpp"
 #include "tracks/track.hpp"
 #include "utils/profiler.hpp"
 
@@ -221,6 +223,16 @@ DrawCalls::~DrawCalls()
  */
 void DrawCalls::prepareDrawCalls(scene::ICameraSceneNode *camnode)
 {
+    if (World::getWorld())
+    {
+        if (World::getWorld()->getPhase() == WorldStatus::IN_GAME_MENU_PHASE &&
+            !NetworkConfig::get()->isNetworking() &&
+            !RaceManager::get()->isBenchmarking())
+        {
+            return;
+        }
+    }
+
     CPUParticleManager::getInstance()->reset();
     TextBillboardDrawer::reset();
     PROFILER_PUSH_CPU_MARKER("--- culling", 0xFF, 0xFF, 0x0);

@@ -40,6 +40,7 @@
 #include "items/item_manager.hpp"
 #include "items/powerup_manager.hpp"
 #include "modes/world.hpp"
+#include "network/network_config.hpp"
 #include "physics/physics.hpp"
 #include "states_screens/race_gui_base.hpp"
 #include "tracks/track.hpp"
@@ -226,6 +227,16 @@ void ShaderBasedRenderer::renderSceneDeferred(scene::ICameraSceneNode * const ca
                                               bool hasShadow,
                                               bool forceRTT)
 {
+
+    if (World::getWorld())
+    {
+        if (World::getWorld()->getPhase() == WorldStatus::IN_GAME_MENU_PHASE &&
+            !NetworkConfig::get()->isNetworking() &&
+            !RaceManager::get()->isBenchmarking())
+        {
+            return;
+        }
+    }
 
     if (CVS->isARBUniformBufferObjectUsable())
     {
@@ -425,6 +436,16 @@ void ShaderBasedRenderer::renderScene(scene::ICameraSceneNode * const camnode,
                                       bool hasShadow,
                                       bool forceRTT)
 {
+    if (World::getWorld())
+    {
+        if (World::getWorld()->getPhase() == WorldStatus::IN_GAME_MENU_PHASE &&
+            !NetworkConfig::get()->isNetworking() &&
+            !RaceManager::get()->isBenchmarking())
+        {
+            return;
+        }
+    }
+
     if (CVS->isARBUniformBufferObjectUsable())
     {
         glBindBufferBase(GL_UNIFORM_BUFFER, 0,
