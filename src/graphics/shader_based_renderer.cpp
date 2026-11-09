@@ -40,7 +40,6 @@
 #include "items/item_manager.hpp"
 #include "items/powerup_manager.hpp"
 #include "modes/world.hpp"
-#include "network/network_config.hpp"
 #include "physics/physics.hpp"
 #include "states_screens/race_gui_base.hpp"
 #include "tracks/track.hpp"
@@ -227,16 +226,6 @@ void ShaderBasedRenderer::renderSceneDeferred(scene::ICameraSceneNode * const ca
                                               bool hasShadow,
                                               bool forceRTT)
 {
-
-    if (World::getWorld())
-    {
-        if (World::getWorld()->getPhase() == WorldStatus::IN_GAME_MENU_PHASE &&
-            !NetworkConfig::get()->isNetworking() &&
-            !RaceManager::get()->isBenchmarking())
-        {
-            return;
-        }
-    }
 
     if (CVS->isARBUniformBufferObjectUsable())
     {
@@ -436,42 +425,36 @@ void ShaderBasedRenderer::renderScene(scene::ICameraSceneNode * const camnode,
                                       bool hasShadow,
                                       bool forceRTT)
 {
-    if (!World::getWorld() ||
-        World::getWorld()->getPhase() != WorldStatus::IN_GAME_MENU_PHASE ||
-        NetworkConfig::get()->isNetworking() ||
-        RaceManager::get()->isBenchmarking())
+    if (CVS->isARBUniformBufferObjectUsable())
     {
-        if (CVS->isARBUniformBufferObjectUsable())
-        {
-            glBindBufferBase(GL_UNIFORM_BUFFER, 0,
-                SP::sp_mat_ubo[SP::sp_cur_player][SP::sp_cur_buf_id[SP::sp_cur_player]]);
-            glBindBufferBase(GL_UNIFORM_BUFFER, 1, SharedGPUObjects::getLightingDataUBO());
-        }
-        irr_driver->getSceneManager()->setActiveCamera(camnode);
+        glBindBufferBase(GL_UNIFORM_BUFFER, 0,
+            SP::sp_mat_ubo[SP::sp_cur_player][SP::sp_cur_buf_id[SP::sp_cur_player]]);
+        glBindBufferBase(GL_UNIFORM_BUFFER, 1, SharedGPUObjects::getLightingDataUBO());
+    }
+    irr_driver->getSceneManager()->setActiveCamera(camnode);
 
-        PROFILER_PUSH_CPU_MARKER("-- Draw Call Generation", 0xFF, 0xFF, 0xFF);
-        m_draw_calls.prepareDrawCalls(camnode);
-        PROFILER_POP_CPU_MARKER();
+    PROFILER_PUSH_CPU_MARKER("-- Draw Call Generation", 0xFF, 0xFF, 0xFF);
+    m_draw_calls.prepareDrawCalls(camnode);
+    PROFILER_POP_CPU_MARKER();
 
-        glDepthMask(GL_TRUE);
-        glDepthFunc(GL_LEQUAL);
-        glEnable(GL_DEPTH_TEST);
-        glDisable(GL_BLEND);
-        glEnable(GL_CULL_FACE);
+    glDepthMask(GL_TRUE);
+    glDepthFunc(GL_LEQUAL);
+    glEnable(GL_DEPTH_TEST);
+    glDisable(GL_BLEND);
+    glEnable(GL_CULL_FACE);
 
-        if (forceRTT)
-        {
-            m_rtts->getFBO(FBO_COLORS).bind();
-            video::SColor clearColor(0, 150, 150, 150);
-            if (World::getWorld() != NULL)
-                clearColor = irr_driver->getClearColor();
+    if (forceRTT)
+    {
+        m_rtts->getFBO(FBO_COLORS).bind();
+        video::SColor clearColor(0, 150, 150, 150);
+        if (World::getWorld() != NULL)
+            clearColor = irr_driver->getClearColor();
 
-            glClearColor(clearColor.getRed() / 255.f, clearColor.getGreen() / 255.f,
-                clearColor.getBlue() / 255.f, clearColor.getAlpha() / 255.f);
-            glClear(GL_COLOR_BUFFER_BIT);
-            glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-            glClear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-        }
+        glClearColor(clearColor.getRed() / 255.f, clearColor.getGreen() / 255.f,
+            clearColor.getBlue() / 255.f, clearColor.getAlpha() / 255.f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        glClear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
     }
 
     {
