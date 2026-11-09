@@ -1113,14 +1113,6 @@ void World::scheduleTutorial()
  */
 void World::updateGraphics(float dt)
 {
-    if (World::getWorld()->getPhase() ==
-        WorldStatus::IN_GAME_MENU_PHASE &&
-        !NetworkConfig::get()->isNetworking() &&
-        !RaceManager::get()->isBenchmarking())
-    {
-        return;
-    }
-
     if (auto cl = LobbyProtocol::get<ClientLobby>())
     {
         // Reset all smooth network body of rewinders so the rubber band effect
