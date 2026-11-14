@@ -23,8 +23,6 @@
 #include "graphics/gl_headers.hpp"
 #include "utils/constants.hpp"
 #include "mini_glm.hpp"
-#include "modes/world.hpp"
-#include "network/network_config.hpp"
 #include "utils/no_copy.hpp"
 #include "utils/singleton.hpp"
 
@@ -121,14 +119,6 @@ public:
     // ------------------------------------------------------------------------
     void reset()
     {
-        if (World::getWorld() &&
-            World::getWorld()->getPhase() == WorldStatus::IN_GAME_MENU_PHASE &&
-            !NetworkConfig::get()->isNetworking() &&
-            !RaceManager::get()->isBenchmarking())
-        {
-            return;
-        }
-
         for (auto& p : m_particles_queue)
         {
             p.second.clear();

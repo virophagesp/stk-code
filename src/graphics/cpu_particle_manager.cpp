@@ -247,14 +247,6 @@ void CPUParticleManager::addBillboardNode(scene::IBillboardSceneNode* node)
 // ----------------------------------------------------------------------------
 void CPUParticleManager::generateAll()
 {
-    if (World::getWorld() &&
-        World::getWorld()->getPhase() == WorldStatus::IN_GAME_MENU_PHASE &&
-        !NetworkConfig::get()->isNetworking() &&
-        !RaceManager::get()->isBenchmarking())
-    {
-        return;
-    }
-
     for (auto& p : m_particles_queue)
     {
         if (p.second.empty())
